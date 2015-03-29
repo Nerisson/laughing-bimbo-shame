@@ -66,6 +66,10 @@ void display()
     glPopMatrix();			// restore the modelview matrix
     glFlush();				// force OpenGL to render now
 
+
+ //   cout << ""
+
+
     glutSwapBuffers();			// make the image visible
 }
 
