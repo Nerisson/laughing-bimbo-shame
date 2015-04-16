@@ -1,0 +1,50 @@
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <GL/glut.h>
+/* Programme principal  */
+
+/* Déclaration des prototypes de fonctions appelées  
+ ----------------------------------------------------------------*/
+
+GLvoid Initialise(char*);
+GLvoid DrawScene(GLvoid);
+
+int main(int argc , char **argv){
+
+	glutInit(&argc,argv);  /* Première fonction à appeler */
+	Initialise(argv[0]);  /* Fonction à écrire pour initialiser la machine OpenGL */
+	glutDisplayFunc(DrawScene);  /* fonction à appeler avec la fonction principale de rendu à écrire */
+	glutMainLoop(); /* Fonction de boucle infinie */
+	
+return (0);
+}
+
+GLvoid Initialise(char* Titre)
+{
+	GLvoid DefineWindow( char *) ;
+	glutInitDisplayMode(GLUT_RGB);
+	DefineWindow(Titre);
+}
+
+GLvoid DefineWindow( char * Titre){
+	GLsizei ScreenWidth , ScreenHeight ;
+
+	ScreenWidth = glutGet(GLUT_SCREEN_WIDTH); 
+	ScreenHeight = glutGet(GLUT_SCREEN_HEIGHT); 
+ 
+	glutInitWindowPosition(ScreenWidth /4, ScreenHeight /4);  glutInitWindowSize(ScreenWidth /2, ScreenHeight /2);
+
+	glutCreateWindow(Titre);
+
+/* Définition de la couleur du fond de la fenêtre  
+	--------------------------------------------------------- */  
+
+	glClearColor(1.,0.,1.,1.);
+}
+
+GLvoid DrawScene(){
+
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	glFlush();
+}
