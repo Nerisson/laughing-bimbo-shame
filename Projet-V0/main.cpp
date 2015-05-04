@@ -2,15 +2,15 @@
 #include <iostream>
 #include <stdlib.h>
 #include <math.h>
+#include <vector>
 
 #include "API/src/CDonneesGraphe.h"
 #include "API/src/CGraphe.h"
 #include "API/src/CSommet.h"
-#include <vector>
-#include <iostream>
-#include <fstream>
-#include <time.h>
-#include <stdlib.h>
+
+#include "Train.h"
+#include "Flotte.h"
+
 #include <string>
 
 #include <windows.h>
@@ -50,11 +50,7 @@ string path2 = path.substr(0, loc+1)+"API\\";
 CDonneesGraphe gdata(path2+"SXYZ.TXT", path2+"SIF.TXT", path2+"PAXYZ.TXT", path2+"AXYZ.TXT");
 CGraphe graphe(gdata);
 
-
-
-
-
-
+Flotte flotte(&graphe);
 
 // width and height of the window
 int h,w;
@@ -120,6 +116,43 @@ void drawSnowMan() {
 	glColor3f(1.0f, 1.0f, 1.0f);
 }
 
+void drawGraphe(){
+
+    //Draw Sommets
+	for(int i=0; i<graphe.nb_sommet; i++){
+	    CSommet sommet = graphe.list_sommet.at(i);
+        glPushMatrix();
+        glTranslatef(sommet.X, sommet.Z, sommet.Y);
+        glutSolidSphere(0.2f,20,20);
+        glPopMatrix();
+	}
+
+
+
+    //Draw Arcs
+    for(int i=0; i<graphe.nb_arc; i++){
+        CArc arc = graphe.list_arc.at(i);
+        glLineWidth(2.5);
+        glColor3f(1.0, 0.0, 0.0);
+        glBegin(GL_LINE_STRIP);
+            CSommet s = graphe.list_sommet.at(arc.id_sommet_ini);
+            glVertex3f(s.X, 0.1, s.Y);
+            for(unsigned int j=0; j<arc.list_point_annexe.size(); j++){
+                CPointAnnexe pa = graphe.list_point_annexe.at(arc.list_point_annexe.at(j));
+                glVertex3f(pa.X, 0.1, pa.Y);
+            }
+            s = graphe.list_sommet.at(arc.id_sommet_fin);
+            glVertex3f(s.X, 0.1, s.Y);
+        glEnd();
+    }
+
+
+}
+
+void drawFlotte(){
+    flotte.draw();
+}
+
 void restorePerspectiveProjection() {
 
 	glMatrixMode(GL_PROJECTION);
@@ -151,15 +184,14 @@ void setOrthographicProjection() {
 
 void computePos(float deltaMove) {
 
-
-
 	x += deltaMove * lx * 0.1f;
 	z += deltaMove * lz * 0.1f;
-
 
 }
 
 void renderScene(void) {
+
+
 
 	if (deltaMove)
 		computePos(deltaMove);
@@ -169,12 +201,14 @@ void renderScene(void) {
 
 	// Reset transformations
 	glLoadIdentity();
+
+
 	// Set the camera
 	gluLookAt(	x, 40.0f,  z,
 			    x, 39.0f,  z,
-			    0.0f, 0.0f,   -1.0f);
+			    0.0f, 0.0f, 1.0f);
 
-// Draw ground
+    // Draw ground
 	glColor3f(0.9f, 0.9f, 0.9f);
 	glBegin(GL_QUADS);
 		glVertex3f(-1000.0f, 0.0f, -1000.0f);
@@ -183,47 +217,9 @@ void renderScene(void) {
 		glVertex3f( 1000.0f, 0.0f, -1000.0f);
 	glEnd();
 
-
-
-	//Draw Sommets
-
-	for(int i=0; i<graphe.nb_sommet; i++){
-	    CSommet sommet = graphe.list_sommet.at(i);
-        glPushMatrix();
-        glTranslatef(sommet.X, sommet.Z, sommet.Y);
-        glutSolidSphere(0.2f,20,20);
-        glPopMatrix();
-	}
-
-
-
-    //Draw Arcs
-
-    for(int i=0; i<graphe.nb_arc; i++){
-        CArc arc = graphe.list_arc.at(i);
-        glLineWidth(2.5);
-        glColor3f(1.0, 0.0, 0.0);
-        glBegin(GL_LINE_STRIP);
-            CSommet s = graphe.list_sommet.at(arc.id_sommet_ini);
-            glVertex3f(s.X, 0.1, s.Y);
-            for(int j=0; j<arc.list_point_annexe.size(); j++){
-                CPointAnnexe pa = graphe.list_point_annexe.at(arc.list_point_annexe.at(j));
-                glVertex3f(pa.X, 0.1, pa.Y);
-            }
-            s = graphe.list_sommet.at(arc.id_sommet_fin);
-            glVertex3f(s.X, 0.1, s.Y);
-        glEnd();
-    }
-
-// Draw 36 SnowMen
-/*	for(int i = -3; i < 3; i++)
-		for(int j=-3; j < 3; j++) {
-			glPushMatrix();
-			glTranslatef(i*10.0f, 0.0f, j * 10.0f);
-			drawSnowMan();
-			glPopMatrix();
-		}
-*/
+    drawGraphe();
+    flotte.move();
+    drawFlotte();
 
 	setOrthographicProjection();
 	glPushMatrix();
@@ -251,9 +247,6 @@ void pressKey(int key, int xx, int yy) {
 		case GLUT_KEY_LEFT  : deltaAngle =  0.01; break;
 		case GLUT_KEY_RIGHT : deltaAngle = -0.01; break;
 	}
-
-
-
 }
 
 void releaseKey(int key, int x, int y) {
@@ -315,21 +308,25 @@ void init() {
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING);
 
-   glEnable(GL_COLOR_MATERIAL);
+    glEnable(GL_COLOR_MATERIAL);
 
 	glEnable(GL_LIGHT0);
 	glEnable(GL_CULL_FACE);
 	glClearColor(0.66f, 0.91f, 1.0f, 0.0f);
 }
 
-
+void initFlotte(int n){
+    flotte.initFlotte(n);
+}
 
 int main(int argc, char **argv) {
+
+    initFlotte(5);
 
 	// init GLUT and create window
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
-	glutInitWindowPosition(100,100);
+	glutInitWindowPosition(600,100);
 	glutInitWindowSize(800,600);
 	glutCreateWindow("Projet-V0");
 
