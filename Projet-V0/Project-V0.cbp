@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Project-V0" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin\Debug\Project-V0" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="C:\Users\Simon\Dropbox\Ecole\OpenGL\Simon\CodeBlocks\MinGW\bin" />
+				<Option object_output="obj\Debug\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin\Release\Project-V0" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="C:\Users\Simon\Dropbox\Ecole\OpenGL\Simon\CodeBlocks\MinGW\bin" />
+				<Option object_output="obj\Release\" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add directory="C:\Users\Simon\Dropbox\Ecole\OpenGL\Simon\CodeBlocks\MinGW\include" />
+		</Compiler>
+		<Linker>
+			<Add library="glut32" />
+			<Add library="opengl32" />
+			<Add library="glu32" />
+			<Add library="winmm" />
+			<Add library="gdi32" />
+			<Add directory="C:\Users\Simon\Dropbox\Ecole\OpenGL\Simon\CodeBlocks\MinGW\lib" />
+		</Linker>
+		<Unit filename="API\AXYZ.TXT" />
+		<Unit filename="API\PAXYZ.TXT" />
+		<Unit filename="API\SIF.TXT" />
+		<Unit filename="API\SXYZ.TXT" />
+		<Unit filename="API\src\CArc.cpp" />
+		<Unit filename="API\src\CArc.h" />
+		<Unit filename="API\src\CData2i.cpp" />
+		<Unit filename="API\src\CData2i.h" />
+		<Unit filename="API\src\CDonneesGraphe.cpp" />
+		<Unit filename="API\src\CDonneesGraphe.h" />
+		<Unit filename="API\src\CGraphe.cpp" />
+		<Unit filename="API\src\CGraphe.h" />
+		<Unit filename="API\src\CPoint3f.cpp" />
+		<Unit filename="API\src\CPoint3f.h" />
+		<Unit filename="API\src\CPointAnnexe.cpp" />
+		<Unit filename="API\src\CPointAnnexe.h" />
+		<Unit filename="API\src\CSegment.cpp" />
+		<Unit filename="API\src\CSegment.h" />
+		<Unit filename="API\src\CSommet.cpp" />
+		<Unit filename="API\src\CSommet.h" />
+		<Unit filename="API\src\consts.h" />
+		<Unit filename="API\src\main.cpp" />
+		<Unit filename="Flotte.cpp" />
+		<Unit filename="Flotte.h" />
+		<Unit filename="Train.cpp" />
+		<Unit filename="Train.h" />
+		<Unit filename="main.cpp" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
