@@ -136,13 +136,13 @@ void drawGraphe(){
         glColor3f(1.0, 0.0, 0.0);
         glBegin(GL_LINE_STRIP);
             CSommet s = graphe.list_sommet.at(arc.id_sommet_ini);
-            glVertex3f(s.X, 0.1, s.Y);
+            glVertex3f(s.X, s.Z, s.Y);
             for(unsigned int j=0; j<arc.list_point_annexe.size(); j++){
                 CPointAnnexe pa = graphe.list_point_annexe.at(arc.list_point_annexe.at(j));
-                glVertex3f(pa.X, 0.1, pa.Y);
+                glVertex3f(pa.X, pa.Z, pa.Y);
             }
             s = graphe.list_sommet.at(arc.id_sommet_fin);
-            glVertex3f(s.X, 0.1, s.Y);
+            glVertex3f(s.X, s.Z, s.Y);
         glEnd();
     }
 
@@ -192,6 +192,7 @@ void computePos(float deltaMove) {
 void renderScene(void) {
 
 
+//    cout << x+lx << " " << z+lz << endl;
 
 	if (deltaMove)
 		computePos(deltaMove);
@@ -204,9 +205,9 @@ void renderScene(void) {
 
 
 	// Set the camera
-	gluLookAt(	x, 40.0f,  z,
-			    x, 39.0f,  z,
-			    0.0f, 0.0f, 1.0f);
+	gluLookAt(	x, 0,  z,
+			    13.9491, 0,  9.29935,
+			    0.0f, 1.0f, 0.0f);
 
     // Draw ground
 	glColor3f(0.9f, 0.9f, 0.9f);
@@ -316,7 +317,8 @@ void init() {
 }
 
 void initFlotte(int n){
-    flotte.initFlotte(n);
+//    flotte.initFlotte(n);
+    flotte.initFlotte(1);
 }
 
 int main(int argc, char **argv) {

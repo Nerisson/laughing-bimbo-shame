@@ -87,21 +87,23 @@ void Train::move(){
                 x = s.X;
                 y = s.Y;
                 z = s.Z;
-                z = 0;
+//                z = 0;
             } else {
                 cPt += 1;
                 x = getPointPrec().X;
                 y = getPointPrec().Y;
                 z = getPointPrec().Z;
-                z = 0.0f;
+//                z = 0.0f;
             }
         } else
             b = false;
     }
-    float a = (getPointPrec().Y-getPointSuiv().Y)/(getPointPrec().X-getPointSuiv().X);
+    float ay = (getPointPrec().Y-getPointSuiv().Y)/(getPointPrec().X-getPointSuiv().X);
+    float az = (getPointPrec().Z-getPointSuiv().Z)/(getPointPrec().X-getPointSuiv().X);
 
-    float dx = fabs(vT/sqrt(1+a*a));
-    float dy = fabs(a*dx);
+    float dx = fabs(vT/sqrt(1+ay*ay+az*az));
+    float dy = fabs(ay*dx);
+    float dz = fabs(az*dx);
 
     if(getPointPrec().X>getPointSuiv().X)
         x -= dx;
@@ -112,4 +114,9 @@ void Train::move(){
         y -= dy;
     else
         y += dy;
+
+    if(getPointPrec().Z>getPointSuiv().Z)
+        z -= dz;
+    else
+        z += dz;
 }
