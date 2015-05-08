@@ -5,6 +5,10 @@ Train::Train(float xx, float yy, float zz, float v, CArc aArc, CGraphe *g){
     y = yy;
     z = zz;
 
+    previousX = 0;
+    previousY = 0;
+    previousZ = 0;
+
     vit = v;
     arc = aArc;
     cPt = 0;
@@ -67,16 +71,23 @@ CPoint3f Train::getPointSuiv(){
 
 void Train::move(){
 
-    float vT = vit;
+
+
+
+
+    GLfloat vT = vit;
 
     bool b = true;
 
     while(b){
 
-        float d = sqrt((x-getPointSuiv().X)*(x-getPointSuiv().X)+(y-getPointSuiv().Y)*(y-getPointSuiv().Y));
-        if(d<vT){
+        GLfloat d = sqrt((x-getPointSuiv().X)*(x-getPointSuiv().X)+(y-getPointSuiv().Y)*(y-getPointSuiv().Y)+(z-getPointSuiv().Z)*(z-getPointSuiv().Z));
+        GLfloat d2 = sqrt((previousX-getPointSuiv().X)*(previousX-getPointSuiv().X)+(previousY-getPointSuiv().Y)*(previousY-getPointSuiv().Y)+(previousZ-getPointSuiv().Z)*(previousZ-getPointSuiv().Z));
+//        cout << d-vT << " " << cPt << " " << d << " " << vT << endl;
+//        cout << x << " " << y << " " << z << " " << d << " " << d2 << " " << d2-d << endl;
+        if(d<vT || d2<d){
             vT = vT - d;
-//            cout << cPt << arc.list_point_annexe.size() << endl;
+//            cout << cPt << " " << arc.list_point_annexe.size() << endl;
             if(cPt==arc.list_point_annexe.size()){
                 CSommet s = graphe->list_sommet.at(arc.id_sommet_fin);
 //                graphe->afficheListArcSortantDuSommet(s);
@@ -87,23 +98,37 @@ void Train::move(){
                 x = s.X;
                 y = s.Y;
                 z = s.Z;
+                previousX = x;
+                previousY = y;
+                previousZ = z;
 //                z = 0;
             } else {
                 cPt += 1;
                 x = getPointPrec().X;
                 y = getPointPrec().Y;
                 z = getPointPrec().Z;
+                previousX = x;
+                previousY = y;
+                previousZ = z;
 //                z = 0.0f;
             }
         } else
             b = false;
     }
-    float ay = (getPointPrec().Y-getPointSuiv().Y)/(getPointPrec().X-getPointSuiv().X);
-    float az = (getPointPrec().Z-getPointSuiv().Z)/(getPointPrec().X-getPointSuiv().X);
+    GLfloat ay = getAy();
+    GLfloat az = (getPointPrec().Z-getPointSuiv().Z)/(getPointPrec().X-getPointSuiv().X);
 
-    float dx = fabs(vT/sqrt(1+ay*ay+az*az));
-    float dy = fabs(ay*dx);
-    float dz = fabs(az*dx);
+    GLfloat dx = fabs(vT/sqrt(1+ay*ay+az*az));
+    GLfloat dy = fabs(ay*dx);
+    GLfloat dz = fabs(az*dx);
+
+    previousX = x;
+    previousY = y;
+    previousZ = z;
+
+//    GLfloat nor= sqrt(dx*dx + dy*dy + dz*dz);
+//
+//    cout<<nor << endl;
 
     if(getPointPrec().X>getPointSuiv().X)
         x -= dx;
@@ -119,4 +144,10 @@ void Train::move(){
         z -= dz;
     else
         z += dz;
+
+
+}
+
+float Train::getAy(){
+    return (getPointPrec().Y-getPointSuiv().Y)/(getPointPrec().X-getPointSuiv().X);
 }

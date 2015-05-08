@@ -19,11 +19,13 @@ class Train
         virtual ~Train();
 
         float Getx() { return x; }
-        void Setx(float val) { x = val; }
         float Gety() { return y; }
-        void Sety(float val) { y = val; }
         float Getz() { return z; }
-        void Setz(float val) { z = val; }
+        float getAy();
+
+        float GetPreviousX() { return previousX; }
+        float GetPreviousY() { return previousY; }
+        float GetPreviousZ() { return previousZ; }
 
         void draw();
         void move();
@@ -35,6 +37,10 @@ class Train
         float x;
         float y;
         float z;
+
+        float previousX;
+        float previousY;
+        float previousZ;
 
         float vit;
         int cPt;

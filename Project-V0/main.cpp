@@ -33,6 +33,11 @@ float deltaAngle = 0.0f;
 float deltaMove = 0;
 int xOrigin = -1;
 
+int camera = 0;
+float angleCamera;
+int cameraTrain = 0;
+int nTrains = 5;
+
 // scale of snowman
 float scale = 1.0f;
 
@@ -78,7 +83,7 @@ void changeSize(int ww, int hh) {
 	glViewport(0, 0, w, h);
 
 	// Set the correct perspective.
-	gluPerspective(45.0f, ratio, 0.1f, 100.0f);
+	gluPerspective(45.0f, ratio, 0.1f, 200.0f);
 
 	// Get Back to the Modelview
 	glMatrixMode(GL_MODELVIEW);
@@ -123,7 +128,7 @@ void drawGraphe(){
 	    CSommet sommet = graphe.list_sommet.at(i);
         glPushMatrix();
         glTranslatef(sommet.X, sommet.Z, sommet.Y);
-        glutSolidSphere(0.2f,20,20);
+        glutSolidSphere(0.01f,20,20);
         glPopMatrix();
 	}
 
@@ -189,6 +194,53 @@ void computePos(float deltaMove) {
 
 }
 
+void look(){
+    switch(camera){
+        case(0):
+            gluLookAt(	x, 0,  z,
+			    13.9491, 0,  9.29935,
+			    0.0f, 1.0f, 0.0f);
+        break;
+        case(1):
+            gluLookAt(	x, 0,  z,
+			    x+lx, 0,  z+lz,
+			    0.0f, 1.0f, 0.0f);
+        break;
+        case(2):
+            gluLookAt(	14.55, 40.0,  8.5,
+			    14.55, 39.0,  8.5,
+			    0.0f, 0.0f, 1.0f);
+        break;
+        case(3):
+            float alpha = atan(flotte.getTrain(cameraTrain).getAy());
+//            cout << alpha << " " << flotte.getTrain(0).getAy() << endl;
+
+            if(flotte.getTrain(cameraTrain).getPointPrec().X>flotte.getTrain(cameraTrain).getPointSuiv().X){
+                alpha = (alpha + M_PI);
+                if(alpha>2*M_PI)
+                    alpha-=2*M_PI;
+            }
+
+            if(angleCamera>alpha)
+                angleCamera -= min(0.0005f, angleCamera-alpha);
+            else if(angleCamera<alpha)
+                angleCamera += min(0.0005f, alpha-angleCamera);
+//            float px = flotte.getTrain(0).GetPreviousX();
+//            float py = flotte.getTrain(0).GetPreviousY();
+//            float pz = flotte.getTrain(0).GetPreviousZ();
+            float x = flotte.getTrain(cameraTrain).Getx();
+            float y = flotte.getTrain(cameraTrain).Gety();
+            float z = flotte.getTrain(cameraTrain).Getz();
+            gluLookAt(	  x, z+0.2,   y,
+                           x+cos(angleCamera),  z+0.2,    y+sin(angleCamera),
+                        0.0f,   1.0f, 0.0f);
+        break;
+    }
+
+
+
+}
+
 void renderScene(void) {
 
 
@@ -205,9 +257,9 @@ void renderScene(void) {
 
 
 	// Set the camera
-	gluLookAt(	x, 0,  z,
-			    13.9491, 0,  9.29935,
-			    0.0f, 1.0f, 0.0f);
+
+	look();
+
 
     // Draw ground
 	glColor3f(0.9f, 0.9f, 0.9f);
@@ -234,6 +286,14 @@ void renderScene(void) {
 
 void processNormalKeys(unsigned char key, int xx, int yy) {
 	switch (key) {
+	    case 'c':
+            camera = camera + 1;
+            camera = camera % 4;
+	    break;
+	    case 'n':
+            cameraTrain = cameraTrain + 1;
+            cameraTrain = cameraTrain % nTrains;
+	    break;
 		case 27:
 			exit(0);
 			break;
@@ -317,13 +377,12 @@ void init() {
 }
 
 void initFlotte(int n){
-//    flotte.initFlotte(n);
-    flotte.initFlotte(1);
+    flotte.initFlotte(5);
 }
 
 int main(int argc, char **argv) {
 
-    initFlotte(5);
+    initFlotte(nTrains);
 
 	// init GLUT and create window
 	glutInit(&argc, argv);

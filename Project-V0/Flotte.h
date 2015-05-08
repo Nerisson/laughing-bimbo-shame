@@ -25,6 +25,7 @@ class Flotte
         int size();
         void draw();
         void move();
+        Train getTrain(int id);
 
         vector<Train> Getv() { return v; }
         void Setv(vector<Train> val) { v = val; }
