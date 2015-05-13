@@ -14,9 +14,14 @@
 #include <string>
 
 #include <windows.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
 #include <GL/glut.h>
 
 using namespace std;
+
+void drawTree(float x, float y, float z, float hauteur);
+
 // angle of rotation for the camera direction
 float angle = 0.0f;
 
@@ -274,6 +279,17 @@ void renderScene(void) {
     flotte.move();
     drawFlotte();
 
+    drawTree(8.7,9.5,0,1.7);
+    drawTree(13,5,0,2.5);
+    drawTree(11,5.5,0,1.7);
+    drawTree(11,7,0,2.0);
+    drawTree(23,7.5,0,2.5);
+    drawTree(24,6.9,0,2.3);
+    drawTree(13,10,0,2.3);
+    drawTree(20,7,0,1.9);
+    drawTree(1.2,3,0,1.8);
+    drawTree(2,2,0,1.9);
+
 	setOrthographicProjection();
 	glPushMatrix();
 	glLoadIdentity();
@@ -350,6 +366,34 @@ void mouseButton(int button, int state, int x, int y) {
 	}
 }
 
+void drawTree(float x, float z, float y, float hauteur)
+{
+
+
+    glPushMatrix();
+    glTranslatef(x,y,z);
+    glRotatef(-90,  1,  0,  0);
+    glColor3d(0.5,0.3,0);
+    glEnable(GL_TEXTURE_2D);
+    GLUquadricObj *tronc;
+    tronc = gluNewQuadric();
+    gluQuadricTexture(tronc,GL_TRUE);
+    gluCylinder(tronc,0.20,0.18,hauteur,100,100);
+    gluDeleteQuadric(tronc);
+
+    glTranslatef(0,0,hauteur);
+
+    glColor3d(0,0.8,0);
+    GLUquadricObj *feuilles;
+    feuilles = gluNewQuadric();
+    gluQuadricTexture(feuilles,GL_TRUE);
+    gluSphere(feuilles,0.7,12,12);
+    gluDeleteQuadric(feuilles);
+
+    glDisable(GL_TEXTURE_2D);
+    glPopMatrix();
+}
+
 void init() {
 
 	// register callbacks
@@ -393,6 +437,7 @@ int main(int argc, char **argv) {
 
 	// register callbacks
 	init();
+
 
 	// enter GLUT event processing cycle
 	glutMainLoop();
