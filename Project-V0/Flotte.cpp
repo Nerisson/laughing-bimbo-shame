@@ -21,7 +21,7 @@ void Flotte::initFlotte(int n){
 //        nArc=5;
         CArc arc = graphe->list_arc.at(nArc);
         CSommet si = graphe->list_sommet.at(arc.id_sommet_ini);
-        Train t(si.X, si.Y, si.Z, 0.0005, arc, graphe);
+        Train t(si.X, si.Y, si.Z, 0.008, arc, graphe);
         v.push_back(t);
     }
     cout << "Trains Charges: " << v.size() << endl;
