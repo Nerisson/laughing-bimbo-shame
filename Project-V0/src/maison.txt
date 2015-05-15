@@ -1,0 +1,45 @@
+void drawHouse(float x, float y, float z){
+    glTranslatef(x, y, z);
+
+    //pavé
+    glColor3f(0.8f,0.8f,0.8f );
+    glutSolidCube(1);
+
+    //toit
+    glBegin(GL_TRIANGLES);
+          glColor3f(1.0f, 0.2f, 0.0f);
+          glVertex3f( 0.0f, 1.0f, 0.0f);
+          glColor3f(1.0f, 0.2f, 0.0f);
+          glVertex3f(-0.5f, 0.5f, 0.5f);
+          glColor3f(1.0f, 0.2f, 0.0f);
+          glVertex3f(0.5f, 0.5f, 0.5f);
+
+          glColor3f(1.0f, 0.2f, 0.0f);
+          glVertex3f(0.0f, 1.0f, 0.0f);
+          glColor3f(1.0f, 0.2f, 0.0f);
+          glVertex3f(0.5f, 0.5f, 0.5f);
+          glColor3f(1.0f, 0.2f, 0.0f);
+          glVertex3f(0.5f, 0.5f, -0.5f);
+
+          glColor3f(1.0f, 0.2f, 0.0f);
+          glVertex3f(0.0f, 1.0f, 0.0f);
+          glColor3f(1.0f, 0.2f, 0.0f);
+          glVertex3f(0.5f, 0.5f, -0.5f);
+          glColor3f(1.0f, 0.2f, 0.0f);
+          glVertex3f(-0.5f, 0.5f, -0.5f);
+
+          glColor3f(1.0f, 0.2f, 0.0f);
+          glVertex3f( 0.0f, 1.0f, 0.0f);
+          glColor3f(1.0f, 0.2f, 0.0f);
+          glVertex3f(-0.5f,0.5f,-0.5f);
+          glColor3f(1.0f, 0.2f, 0.0f);
+          glVertex3f(-0.5f,0.5f, 0.5f);
+   glEnd();
+}
+
+
+
+    drawHouse(2.0f, 0.5f, 2.0f);
+    drawHouse(10.0f, 0.5f, 10.0f);
+    drawHouse(5.0f, 0.5f, -1.0f);
+    drawHouse(3.0f, 0.5f, -2.0f);
