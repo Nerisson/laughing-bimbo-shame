@@ -1,4 +1,5 @@
 #include "Train.h"
+#include <math.h>
 
 Train::Train(float xx, float yy, float zz, float v, CArc aArc, CGraphe *g){
     x = xx;
@@ -22,6 +23,13 @@ Train::~Train()
 
 void Train::draw(){
     glTranslatef(x, z, y);
+    float alpha = atan(getAy());
+    if(getPointPrec().X>getPointSuiv().X){
+        alpha = (alpha + M_PI);
+        if(alpha>2*M_PI)
+            alpha-=2*M_PI;
+    }
+    glRotatef(alpha*360/(2*M_PI),0.0f,1.0f,0.0f);
     float scale = 0.5;
         // color for the snowman's nose
     float red = 1.0f, blue=0.5f, green=0.5f;
@@ -66,9 +74,10 @@ void Train::draw(){
 	glutSolidSphere(0.30f,10,10);
 
 // Draw Little Snwoman's Nose
-	glColor3f(red, green, blue);
+	glColor3f(red, 0, 0);
 	glRotatef(0.0f,.5f, 0.0f, 0.0f);
-	glutSolidCone(0.04f,0.2f,5,1);
+	glTranslatef(0.2f, .0f, 0.2f);
+	glutSolidCone(0.04f,0.2f,10,2);
 
 	glColor3f(1.0f, 1.0f, 1.0f);
 	glPopMatrix();

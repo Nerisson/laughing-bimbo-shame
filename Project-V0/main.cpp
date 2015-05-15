@@ -257,6 +257,15 @@ void drawHouse(float x, float y, float z){
     glColor3f(0.8f,0.8f,0.8f );
     glutSolidCube(1);
 
+     //Porte
+     glColor3f(0.8f, 0.4f, 0.0f);
+     glBegin(GL_QUADS);
+        glVertex3f( 0.51f, .0f, 0.2f);
+        glVertex3f( 0.51f, -0.5f, 0.2f);
+        glVertex3f( 0.51f, -0.5f, -0.2f);
+        glVertex3f( 0.51f, .0f, -0.2f);
+    glEnd();
+
     //toit
     glBegin(GL_TRIANGLES);
           glColor3f(0.8f, 0.4f, 0.0f);
@@ -287,6 +296,8 @@ void drawHouse(float x, float y, float z){
           glColor3f(0.8f, 0.4f, 0.0f);
           glVertex3f(-0.5f,0.5f, 0.5f);
    glEnd();
+
+
    glTranslatef(-x, -y, -z);
 }
 
@@ -380,13 +391,13 @@ void computePos(float deltaMove) {
 void look(){
     switch(camera){
         case(0):
-            gluLookAt(	x, 0,  z,
-			    13.9491, 0,  9.29935,
+            gluLookAt(	x, 0.5,  z,
+			    13.9491, 0.5,  9.29935,
 			    0.0f, 1.0f, 0.0f);
         break;
         case(1):
-            gluLookAt(	x, 0,  z,
-			    x+lx, 0,  z+lz,
+            gluLookAt(	x, 0.5,  z,
+			    x+lx, 0.5,  z+lz,
 			    0.0f, 1.0f, 0.0f);
         break;
         case(2):
