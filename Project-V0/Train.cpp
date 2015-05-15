@@ -50,8 +50,28 @@ void Train::draw(){
 	glColor3f(red, green, blue);
 	glRotatef(0.0f,1.0f, 0.0f, 0.0f);
 	glutSolidCone(0.08f,0.5f,10,2);
+    //glPopMatrix();
+
+// Draw Little Snowman
+    glPushMatrix();
+	glScalef(scale, scale, scale);
+	glColor3f(1.0f, 1.0f, 1.0f);
+
+// Draw Little Snowman's Body
+	glTranslatef(-2.f ,-2.8f, -2.f);
+	glutSolidSphere(0.75f,20,20);
+
+// Draw Head
+	glTranslatef(0.f, 1.f, 0.f);
+	glutSolidSphere(0.30f,10,10);
+
+// Draw Little Snwoman's Nose
+	glColor3f(red, green, blue);
+	glRotatef(0.0f,.5f, 0.0f, 0.0f);
+	glutSolidCone(0.04f,0.2f,5,1);
 
 	glColor3f(1.0f, 1.0f, 1.0f);
+	glPopMatrix();
 }
 
 CPoint3f Train::getPointPrec(){

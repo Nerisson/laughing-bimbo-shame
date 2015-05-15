@@ -21,8 +21,6 @@
 
 using namespace std;
 
-void drawTree(float x, float y, float z, float hauteur);
-
 // angle of rotation for the camera direction
 float angle = 0.0f;
 
@@ -166,7 +164,7 @@ void drawFlotte(){
     flotte.draw();
 }
 
-void drawTree(float x, float z, float y, float hauteur){
+void drawFeuillu(float x, float z, float y, float hauteur){
 
 
     glPushMatrix();
@@ -193,18 +191,130 @@ void drawTree(float x, float z, float y, float hauteur){
     glPopMatrix();
 }
 
-void drawForest(){
-    drawTree(8.7,9.5,0,1.7);
-    drawTree(13,5,0,2.5);
-    drawTree(11,5.5,0,1.7);
-    drawTree(11,7,0,2.0);
-    drawTree(23,7.5,0,2.5);
-    drawTree(24,6.9,0,2.3);
-    drawTree(13,10,0,2.3);
-    drawTree(20,7,0,1.9);
-    drawTree(1.2,3,0,1.8);
-    drawTree(2,2,0,1.9);
+void drawConnifere (float x, float z, float y, float hauteur){
 
+
+    glPushMatrix();
+    glTranslatef(x,y,z);
+    glRotatef(-90,  1,  0,  0);
+    glColor3d(0.5,0.3,0);
+    glEnable(GL_TEXTURE_2D);
+    GLUquadricObj *tronc;
+    tronc = gluNewQuadric();
+    gluQuadricTexture(tronc,GL_TRUE);
+    gluCylinder(tronc,0.20,0.18,hauteur+0.3,100,100);
+    gluDeleteQuadric(tronc);
+
+    glTranslatef(0,0,hauteur);
+
+    glColor3d(0,0.8,0);
+    GLUquadricObj *feuilles;
+    feuilles = gluNewQuadric();
+    gluQuadricTexture(feuilles,GL_TRUE);
+    glutSolidCone(1,2,20,4);
+    gluDeleteQuadric(feuilles);
+
+    glDisable(GL_TEXTURE_2D);
+    glPopMatrix();
+}
+
+
+void drawNuages (float x, float z, float y){
+
+
+    glPushMatrix();
+    glTranslatef(x,y,z);
+    glRotatef(-90,  x,  0,  1);
+    glEnable(GL_TEXTURE_2D);
+
+    glColor3d(1.,1.,1.0);
+    GLUquadricObj *nuage;
+    nuage = gluNewQuadric();
+    //On construit les nuages comme une succession de sphères légèrement décalées
+    for (int i = 1; i<12; i++){
+        gluQuadricTexture(nuage,GL_TRUE);
+        glutSolidSphere(0.7,12,12);
+        if (i & 1){
+            glTranslatef(.1,.1,.3);
+            if (i/2 & 1){
+                glTranslatef(.1,-0.1,-0.2);
+            }
+        }
+        else {
+            glTranslatef(0.1,0.2,-0.3);
+        }
+    }
+    gluDeleteQuadric(nuage);
+
+    glDisable(GL_TEXTURE_2D);
+    glPopMatrix();
+}
+
+void drawHouse(float x, float y, float z){
+    glTranslatef(x, y, z);
+
+    //pavé
+    glColor3f(0.8f,0.8f,0.8f );
+    glutSolidCube(1);
+
+    //toit
+    glBegin(GL_TRIANGLES);
+          glColor3f(0.8f, 0.4f, 0.0f);
+          glVertex3f( 0.0f, 1.0f, 0.0f);
+          glColor3f(0.8f, 0.4f, 0.0f);
+          glVertex3f(-0.5f, 0.5f, 0.5f);
+          glColor3f(0.8f, 0.4f, 0.0f);
+          glVertex3f(0.5f, 0.5f, 0.5f);
+
+         glColor3f(0.8f, 0.4f, 0.0f);
+          glVertex3f(0.0f, 1.0f, 0.0f);
+          glColor3f(0.8f, 0.4f, 0.0f);
+          glVertex3f(0.5f, 0.5f, 0.5f);
+         glColor3f(0.8f, 0.4f, 0.0f);
+          glVertex3f(0.5f, 0.5f, -0.5f);
+
+          glColor3f(0.8f, 0.4f, 0.0f);
+          glVertex3f(0.0f, 1.0f, 0.0f);
+          glColor3f(0.8f, 0.4f, 0.0f);
+          glVertex3f(0.5f, 0.5f, -0.5f);
+          glColor3f(0.8f, 0.4f, 0.0f);
+          glVertex3f(-0.5f, 0.5f, -0.5f);
+
+         glColor3f(0.8f, 0.4f, 0.0f);
+          glVertex3f( 0.0f, 1.0f, 0.0f);
+          glColor3f(0.8f, 0.4f, 0.0f);
+          glVertex3f(-0.5f,0.5f,-0.5f);
+          glColor3f(0.8f, 0.4f, 0.0f);
+          glVertex3f(-0.5f,0.5f, 0.5f);
+   glEnd();
+   glTranslatef(-x, -y, -z);
+}
+
+void drawDecor(){
+    drawFeuillu(8.7,9.5,0,1.7); // au sol
+    drawFeuillu(13,5,1.3,2.5);
+    drawFeuillu(11,5.5,0.8,1.7);
+    drawFeuillu(11,7,0.1,2.0); // presque au sol
+    drawFeuillu(13,10,0,2.3); // au sol
+    drawFeuillu(20,7,0,1.9);
+    drawFeuillu(1.2,3,0,1.8); // au sol
+    drawFeuillu(2,2,0,1.9); // au sol
+
+    drawConnifere(21,5,0,0.4);
+    drawConnifere(18,6,0,0.4);
+    drawConnifere(19,7,0.,0.4);
+    drawConnifere(23,7.5,0.5,.5); // au sol
+    drawConnifere(24,6.9,0,.5); // au sol
+
+    drawNuages(15,15,4.5);
+    drawNuages(13,5,5.2);
+    drawNuages(10,2,5.2);
+    drawNuages(8,1,5);
+
+    drawHouse(8.0f, 0.5f, 2.0f);
+    drawHouse(10.0f, 0.5f, 10.0f);
+    drawHouse(5.5f, 0.5f, -.5f);
+    drawHouse(3.f, 0.5f, -.2f);
 }
 
 
@@ -226,7 +336,7 @@ void drawMNT(){
 }
 
 void drawScene(){
-    drawForest();
+    drawDecor();
     drawMNT();
 }
 
@@ -349,7 +459,6 @@ void renderScene(void) {
     drawGraphe();
     flotte.move();
     drawFlotte();
-
 
 	setOrthographicProjection();
 	glPushMatrix();
